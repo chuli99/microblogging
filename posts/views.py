@@ -1,8 +1,9 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-from django.contrib.auth import login
+from django.contrib.auth import login, logout
 from django.http import HttpResponse
+from django.db import IntegrityError
 # Create your views here.
 
 
@@ -27,15 +28,18 @@ def signup(request):
                 user.save()
                 login(request, user)
                 return redirect('posts')
-            except:
+            except IntegrityError:
                 return render(request, 'signup.html', {
                     'form': UserCreationForm,
-                    'error': 'El usuario ya existe'
+                    'error': 'User already exists'
                 })
         return render(request, 'signup.html', {
             'form': UserCreationForm,
             'error': 'Las contraseñas no coinciden'
         })
+def signout(request):
+    logout(request)
+    return redirect('home')
 
 def posts(request):
     return render(request, 'home.html')
