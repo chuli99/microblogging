@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import login, logout, authenticate
 from django.http import HttpResponse
 from django.db import IntegrityError
+from .forms import PostForm
 # Create your views here.
 
 
@@ -61,3 +62,22 @@ def signin(request):
 
 def posts(request):
     return render(request, 'home.html')
+
+def create_post(request):
+    if request.method == 'GET':
+        return render(request, 'create_post.html',{
+            'form': PostForm
+        })
+    else:
+        try:
+            form = PostForm(request.POST)
+            new_post = form.save(commit=False)
+            new_post.user = request.user
+            new_post.save()
+            return redirect('home')
+        except ValueError:
+            return render(request,'create_post.html',{
+                'form': PostForm(),
+                'error': 'Por favor ingrese datos validos'
+            })
+    
