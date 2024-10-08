@@ -78,6 +78,6 @@ def create_post(request):
         except ValueError:
             return render(request,'create_post.html',{
                 'form': PostForm(),
-                'error': 'Por favor ingrese datos validos'
+                'error': 'Por favor ingrese solo datos validos'
             })
     
