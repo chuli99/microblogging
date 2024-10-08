@@ -1,0 +1,7 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>{{post.content}}</h1>
+    <p>{{post.created_at}}</p>
+    <p>{{post.user.username}}</p>
+{% endblock %}
