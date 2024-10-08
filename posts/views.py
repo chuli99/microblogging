@@ -70,6 +70,12 @@ def post_detail(request, post_id):
     post = get_object_or_404(Post,pk=post_id)
     return render(request, 'post_detail.html',{'post':post})
 
+def delete_post(request, post_id):
+    post = get_object_or_404(Post,pk=post_id, user=request.user)
+    if request.method == 'POST':
+        post.delete()
+        return redirect('posts')
+
 def create_post(request):
     if request.method == 'GET':
         return render(request, 'create_post.html',{
@@ -81,7 +87,7 @@ def create_post(request):
             new_post = form.save(commit=False)
             new_post.user = request.user
             new_post.save()
-            return redirect('home')
+            return redirect('posts')
         except ValueError:
             return render(request,'create_post.html',{
                 'form': PostForm(),
