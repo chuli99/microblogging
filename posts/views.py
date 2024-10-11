@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import login, logout, authenticate
 from django.http import HttpResponse
 from django.db import IntegrityError
+from django.contrib.auth.decorators import login_required
 from .forms import PostForm
 from .models import Post
 
@@ -70,12 +71,14 @@ def post_detail(request, post_id):
     post = get_object_or_404(Post,pk=post_id)
     return render(request, 'post_detail.html',{'post':post})
 
+@login_required
 def delete_post(request, post_id):
     post = get_object_or_404(Post,pk=post_id, user=request.user)
     if request.method == 'POST':
         post.delete()
         return redirect('posts')
 
+@login_required
 def create_post(request):
     if request.method == 'GET':
         return render(request, 'create_post.html',{
