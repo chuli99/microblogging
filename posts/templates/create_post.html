@@ -1,12 +1,46 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <h2>Create a new post</h2>
-    <form action="/posts/create/" method = "POST">
+<div class="card">
+    <h2 style="font-size: 1.8rem; color: var(--primary-color); margin-bottom: 20px; text-align: center;">Crear nuevo post</h2>
+    
+    {% if error %}
+    <div class="error-message">{{ error }}</div>
+    {% endif %}
+    
+    <form action="/posts/create/" method="POST">
         {% csrf_token %}
-        {{form}}
-        <button type="submit">
-            Crear
-        </button>
+        <div class="form-group">
+            <label for="{{ form.content.id_for_label }}" style="display: block; margin-bottom: 8px; font-weight: 500;">¿Qué estás pensando?</label>
+            {{ form.content }}
+            <div style="text-align: right; color: #657786; font-size: 0.8rem; margin-top: 5px;">
+                <span id="char-count">0</span>/140 caracteres
+            </div>
+        </div>
+        <div style="display: flex; justify-content: space-between; margin-top: 20px;">
+            <a href="/posts/" class="btn btn-outline" style="text-decoration: none;">Cancelar</a>
+            <button type="submit" class="btn btn-primary">
+                Publicar
+            </button>
+        </div>
     </form>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const contentField = document.getElementById('{{ form.content.id_for_label }}');
+        const charCount = document.getElementById('char-count');
+        
+        contentField.addEventListener('input', function() {
+            const currentLength = this.value.length;
+            charCount.textContent = currentLength;
+            
+            if (currentLength > 140) {
+                charCount.style.color = '#E0245E';
+            } else {
+                charCount.style.color = '#657786';
+            }
+        });
+    });
+</script>
 {% endblock %}

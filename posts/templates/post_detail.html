@@ -1,13 +1,42 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <h1>{{post.content}}</h1>
-    <p>{{post.created_at}}</p>
-    <p>{{post.user.username}}</p>
-    {% if user.is_authenticated and user == post.user %}
-        <form action="{% url 'delete_post' post.id %}" method="POST">
+<div class="card" style="margin-top: 20px; padding: 25px;">
+    <div class="post-header" style="margin-bottom: 20px; border-bottom: 1px solid var(--border-color); padding-bottom: 15px;">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <h2 style="font-size: 1.6rem; color: var(--secondary-color);">
+                <span style="color: var(--primary-color); font-weight: 500;">@{{ post.user.username }}</span>
+            </h2>
+            <div style="color: #657786; font-size: 0.9rem;">
+                {{ post.created_at|date:"d M, Y - H:i" }}
+            </div>
+        </div>
+    </div>
+    
+    <div class="post-body">
+        <p style="font-size: 1.4rem; line-height: 1.5; margin-bottom: 25px;">{{ post.content }}</p>
+    </div>
+    
+    <div class="post-actions" style="margin-top: 30px; display: flex; justify-content: space-between; align-items: center;">
+        <a href="/posts" class="btn btn-outline" style="text-decoration: none;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" style="vertical-align: middle; margin-right: 5px;" viewBox="0 0 16 16">
+                <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"/>
+            </svg>
+            Volver
+        </a>
+        
+        {% if user.is_authenticated and user == post.user %}
+        <form action="{% url 'delete_post' post.id %}" method="POST" style="margin: 0;">
             {% csrf_token %}
-            <button type="submit">Delete</button>
+            <button type="submit" class="btn btn-outline" style="color: #E0245E; border-color: #E0245E;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" style="vertical-align: middle; margin-right: 5px;" viewBox="0 0 16 16">
+                    <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
+                    <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
+                </svg>
+                Eliminar
+            </button>
         </form>
-    {% endif %}
+        {% endif %}
+    </div>
+</div>
 {% endblock %}

@@ -1,19 +1,43 @@
 {% extends 'base.html'%}
 {% block content %}
-<h1>Posts</h1>
-{% if user.is_authenticated %}
-    <a href="/posts/create/">Create a new post</a>
-{% endif %}
-<ul>
-    {% for post in posts %}
-        <a href="{% url 'post_detail' post.id %}">
-            <li>
-                <p>{{post.content}}</p>
-                <p>{{post.created_at}}</p>
-                <p>{{post.user.username}}</p>
-            </li>
-        </a>    
-    {% endfor %}
-</ul>
+<div class="posts-header">
+    <h1 style="font-size: 1.8rem; color: var(--secondary-color); margin-bottom: 20px;">Posts recientes</h1>
+    {% if user.is_authenticated %}
+    <a href="/posts/create/" class="btn btn-primary" style="text-decoration: none; display: inline-block; margin-bottom: 20px;">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" style="vertical-align: middle; margin-right: 5px;" viewBox="0 0 16 16">
+            <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
+        </svg>
+        Crear nuevo post
+    </a>
+    {% endif %}
+</div>
 
+<div class="posts-container">
+    {% if posts %}
+        {% for post in posts %}
+        <a href="{% url 'post_detail' post.id %}" style="text-decoration: none; color: inherit;">
+            <div class="card post-item" style="transition: transform 0.2s; cursor: pointer;">
+                <div class="post-content">{{ post.content }}</div>
+                <div class="post-meta">
+                    <div class="post-user" style="font-weight: 500;">@{{ post.user.username }}</div>
+                    <div class="post-date">{{ post.created_at|date:"d M, Y H:i" }}</div>
+                </div>
+            </div>
+        </a>
+        {% endfor %}
+    {% else %}
+        <div class="card" style="text-align: center; padding: 30px;">
+            <p style="color: #657786; font-size: 1.1rem;">Aún no hay posts. ¡Sé el primero en publicar algo!</p>
+            {% if user.is_authenticated %}
+            <a href="/posts/create/" class="btn btn-primary" style="text-decoration: none; display: inline-block; margin-top: 15px;">
+                Crear el primer post
+            </a>
+            {% else %}
+            <a href="/signin/" class="btn btn-primary" style="text-decoration: none; display: inline-block; margin-top: 15px;">
+                Iniciar sesión para publicar
+            </a>
+            {% endif %}
+        </div>
+    {% endif %}
+</div>
 {% endblock %}

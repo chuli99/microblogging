@@ -64,7 +64,7 @@ def signin(request):
         
 
 def posts(request):
-    posts = Post.objects.all()
+    posts = Post.objects.all().order_by('-created_at')  # El signo '-' indica orden descendente
     return render(request, 'posts.html',{'posts':posts})
 
 def post_detail(request, post_id):
@@ -96,4 +96,3 @@ def create_post(request):
                 'form': PostForm(),
                 'error': 'Por favor ingrese solo datos validos'
             })
-    

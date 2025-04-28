@@ -1,36 +1,243 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Microblogging</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #1DA1F2;
+            --secondary-color: #14171A;
+            --background-color: #F5F8FA;
+            --text-color: #14171A;
+            --border-color: #E1E8ED;
+            --hover-color: #E8F5FD;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+        
+        /* Fondo de imagen para todas las páginas */
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+            z-index: 10;
+        }
+        
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            opacity: 0.55; /* Aumentado de 0.35 a 0.55 para que se vea mucho más */
+            z-index: -1;
+        }
+        
+        /* Estilos para las páginas de autenticación con imagen de montaña completa */
+        .auth-container {
+            min-height: calc(100vh - 70px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-image: url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            padding: 20px;
+            position: relative;
+        }
+        
+        .auth-card {
+            width: 100%;
+            max-width: 450px;
+            background-color: rgba(255, 255, 255, 0.8); /* Reducido de 0.9 a 0.8 */
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            padding: 30px;
+            position: relative;
+            z-index: 10;
+        }
+        
+        .logo-image {
+            height: 40px; /* Ligeramente más grande para la nueva imagen */
+            width: auto;
+            display: block;
+        }
+        
+        nav {
+            background-color: rgba(255, 255, 255, 0.8); /* Reducido de 0.9 a 0.8 */
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            padding: 15px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+        
+        .brand {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+        
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 20px;
+        }
+        
+        .nav-menu a {
+            text-decoration: none;
+            color: var(--text-color);
+            font-weight: 500;
+            transition: color 0.3s;
+            padding: 8px 12px;
+            border-radius: 20px;
+        }
+        
+        .nav-menu a:hover {
+            color: var(--primary-color);
+            background-color: var(--hover-color);
+        }
+        
+        .btn {
+            padding: 8px 16px;
+            border-radius: 20px;
+            border: none;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: #0d8ecf;
+        }
+        
+        .btn-outline {
+            background-color: transparent;
+            border: 1px solid var(--primary-color);
+            color: var(--primary-color);
+        }
+        
+        .btn-outline:hover {
+            background-color: var(--hover-color);
+        }
+        
+        /* Estilos mejorados para el contenido sobre la imagen */
+        .card {
+            background-color: rgba(255, 255, 255, 0.8); /* Reducido de 0.9 a 0.8 */
+            border-radius: 10px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin-bottom: 15px;
+            border: 1px solid var(--border-color);
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        input, textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            font-family: 'Roboto', sans-serif;
+            background-color: rgba(255, 255, 255, 0.7); /* Añadido para campos de formulario */
+        }
+        
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+        
+        .error-message {
+            color: red;
+            margin-bottom: 15px;
+        }
+        
+        .post-item {
+            border-bottom: 1px solid var(--border-color);
+            padding: 15px 0;
+            transition: background-color 0.3s;
+        }
+        
+        .post-item:hover {
+            background-color: rgba(232, 245, 253, 0.8); /* Modificado para ser semi-transparente */
+        }
+        
+        .post-content {
+            font-size: 1rem;
+            margin-bottom: 10px;
+        }
+        
+        .post-meta {
+            display: flex;
+            justify-content: space-between;
+            color: #657786;
+            font-size: 0.9rem;
+        }
+        
+        .post-actions {
+            margin-top: 15px;
+        }
+    </style>
 </head>
 <body>
     <nav>
-        
-        {% if user.is_authenticated %}
-        <ul>
-            <li>
-                <a href="/logout">logOut</a>
-            </li>
-        </ul>
-        {% else %}
-        <ul>
-            <li>
-                <a href="/signup">signup</a>
-            </li>
-            <li>
-                <a href="/signin">signin</a>
-            </li>
-        </ul>
-        {% endif %}
-        <ul>
-            <li>
-            <a href="/posts">posts</a>
-            </li>
-        </ul>
+        <div class="nav-container">
+            <a href="/" class="brand">
+                <img src="{% static 'posts/img/montagne.png' %}" alt="Logo Montaña" class="logo-image">
+            </a>
+            <ul class="nav-menu">
+                <li><a href="/posts">Posts</a></li>
+                {% if user.is_authenticated %}
+                <li><a href="/logout">Log Out</a></li>
+                {% else %}
+                <li><a href="/signin">Sign In</a></li>
+                <li><a href="/signup">Sign Up</a></li>
+                {% endif %}
+            </ul>
+        </div>
     </nav>
-    {% block content %}
-    {% endblock %}
+    
+    <div class="container">
+        {% block content %}
+        {% endblock %}
+    </div>
 </body>
 </html>

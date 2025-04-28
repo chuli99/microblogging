@@ -1,12 +1,27 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h1>SignIn</h1>
-{{error}}
-<form action="/signin/" method="POST">
-    {% csrf_token %}
-    {{form.as_p}}
-    <button>
-        SignIn
-    </button>
+<div class="auth-container">
+    <div class="card auth-card">
+        <h1 style="font-size: 2rem; color: var(--primary-color); margin-bottom: 20px; text-align: center;">Iniciar Sesión</h1>
+        
+        {% if error %}
+        <div class="error-message">{{ error }}</div>
+        {% endif %}
+        
+        <form action="/signin/" method="POST">
+            {% csrf_token %}
+            <div class="form-group">
+                {{ form.as_p }}
+            </div>
+            <button type="submit" class="btn btn-primary" style="width: 100%;">
+                Iniciar Sesión
+            </button>
+        </form>
+        
+        <div style="margin-top: 20px; text-align: center;">
+            <p>¿No tienes una cuenta? <a href="/signup/" style="color: var(--primary-color); text-decoration: none;">Regístrate</a></p>
+        </div>
+    </div>
+</div>
 {% endblock %}
